@@ -1,0 +1,21 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="mx-auto bg-white p-4 rounded shadow-sm" style="max-width: 400px; margin-top: 50px;">
+    <h3 class="mb-4 text-center">Вход в систему</h3>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Логин</label>
+            <input type="text" name="login" class="form-control" required placeholder="Введите логин">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Пароль</label>
+            <input type="password" name="password" class="form-control" required placeholder="Введите пароль">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="remember" class="form-check-input" id="remember">
+            <label class="form-check-label" for="remember">Запомнить меня</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Войти</button>
+    </form>
+</div>
+{% endblock %}

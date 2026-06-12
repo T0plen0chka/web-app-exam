@@ -1,0 +1,67 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="row g-0">
+        <div class="col-md-4 bg-dark text-center d-flex align-items-center justify-content-center p-3">
+            {% if book.cover %}
+                <img src="{{ url_for('static', filename='covers/' + book.cover.filename) }}" class="img-fluid rounded" alt="Обложка" style="max-height: 400px;">
+            {% else %}
+                <span class="text-white-50">Нет обложки</span>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h1 class="card-title">{{ book.title }}</h1>
+                <h5 class="text-muted mb-3">Автор: {{ book.author }}</h5>
+                <p><strong>Издательство:</strong> {{ book.publisher }}, {{ book.year }} г.</p>
+                <p><strong>Объём:</strong> {{ book.pages }} стр.</p>
+                <p><strong>Жанры:</strong> 
+                    {% for g in book.genres %}
+                        <span class="badge bg-primary">{{ g.name }}</span>
+                    {% endfor %}
+                </p>
+                <hr>
+                <div class="markdown-body">
+                    {{ book.description | markdown | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-5">
+    <div class="card-body">
+        <h3 class="card-title mb-4">Рецензии пользователей</h3>
+        
+        {% if book.reviews %}
+            {% for review in book.reviews %}
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>{{ review.user.full_name }}</strong>
+                        <span class="badge bg-warning text-dark">Оценка: {{ review.rating }}/5</span>
+                    </div>
+                    <div class="text-muted small mb-2">Добавлено: {{ review.created_at.strftime('%d.%m.%Y %H:%M') }}</div>
+                    <div>{{ review.text | markdown | safe }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Рецензий пока нет. Будьте первым!</p>
+        {% endif %}
+
+        <div class="mt-4">
+            {% if current_user.is_authenticated %}
+                {% if user_review %}
+                    <div class="alert alert-secondary">
+                        <h5>Ваша рецензия (Оценка: {{ user_review.rating }}/5):</h5>
+                        <div>{{ user_review.text | markdown | safe }}</div>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('add_review', book_id=book.id) }}" class="btn btn-success">Написать рецензию</a>
+                {% endif %}
+            {% else %}
+                <p class="text-muted"><a href="{{ url_for('login') }}">Войдите</a>, чтобы оставить рецензию.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

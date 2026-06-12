@@ -1,0 +1,63 @@
+﻿{% extends "base.html" %}
+
+{% macro render_form(action, genres, book=None) %}
+<form method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow-sm">
+    <div class="mb-3">
+        <label class="form-label">Название книги</label>
+        <input type="text" name="title" class="form-control" required value="{{ book.title if book else '' }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Автор</label>
+        <input type="text" name="author" class="form-control" required value="{{ book.author if book else '' }}">
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Год издания</label>
+            <input type="number" name="year" class="form-control" required value="{{ book.year if book else '' }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Издательство</label>
+            <input type="text" name="publisher" class="form-control" required value="{{ book.publisher if book else '' }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Объём (в страницах)</label>
+            <input type="number" name="pages" class="form-control" required value="{{ book.pages if book else '' }}">
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Жанры</label>
+        <select name="genres" class="form-select" multiple required size="4">
+            {% for g in genres %}
+                <option value="{{ g.id }}" 
+                    {% if book and g in book.genres %}selected{% endif %}>
+                    {{ g.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Краткое описание (Поддерживает Markdown)</label>
+        <textarea name="description" id="markdown-editor" class="form-control" rows="5">{{ book.description if book else '' }}</textarea>
+    </div>
+
+    {% if action == 'add' %}
+    <div class="mb-4">
+        <label class="form-label">Обложка книги (изображение)</label>
+        <input type="file" name="cover" class="form-control" accept="image/*" required>
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+</form>
+{% endmacro %}
+
+{% block content %}
+<h2 class="mb-4">{% if action == 'add' %}Добавление новой книги{% else %}Редактирование книги{% endif %}</h2>
+{{ render_form(action, genres, book) }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var easyMDE = new EasyMDE({element: document.getElementById('markdown-editor')});
+</script>
+{% endblock %}

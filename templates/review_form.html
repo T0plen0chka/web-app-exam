@@ -1,0 +1,52 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4">
+            <h2 class="mb-4 text-center">Оставить рецензию на книгу</h2>
+            <h4 class="text-muted text-center mb-4">«{{ book.title }}»</h4>
+
+            <form method="POST" action="{{ url_for('add_review', book_id=book.id) }}" onsubmit="if(typeof easymde !== 'undefined') { easymde.element.value = easymde.value(); }">
+                
+                <div class="mb-3">
+                    <label for="rating" class="form-label"><strong>Оценка книги:</strong></label>
+                    <select name="rating" id="rating" class="form-select" required>
+                        <option value="" disabled selected>Выберите оценку...</option>
+                        <option value="5">5 — Отлично</option>
+                        <option value="4">4 — Хорошо</option>
+                        <option value="3">3 — Удовлетворительно</option>
+                        <option value="2">2 — Плохо</option>
+                        <option value="1">1 — Ужасно</option>
+                        <option value="0">0 — Невозможно читать</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="text" class="form-label"><strong>Текст рецензии (поддерживается Markdown):</strong></label>
+                    <textarea name="text" id="text" class="form-control" rows="8" placeholder="Напишите ваши впечатления о книге..."></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('view_book', book_id=book.id) }}" class="btn btn-secondary">Отмена</a>
+                    <button type="submit" class="btn btn-success px-4">Сохранить</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Инициализация красивого Markdown-редактора для поля рецензии
+    var easymde = new EasyMDE({
+        element: document.getElementById("text"),
+        spellChecker: false,
+        placeholder: "Напишите ваши впечатления о книге...",
+        status: false
+    });
+</script>
+{% endblock %}
