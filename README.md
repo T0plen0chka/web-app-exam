@@ -43,8 +43,10 @@
 
 2. **Создайте и активируйте виртуальное окружение:**
 python -m venv library-env
+
 Для Windows (PowerShell):
 .\library-env\Scripts\Activate.ps1
+
 Для Linux/macOS:
 source library-env/bin/activate
 
@@ -56,6 +58,10 @@ flask init-db
 
 Скрипт автоматически создаст таблицы, роли и тестовый аккаунт администратора:
 Логин: admin | Пароль: password
+
+(Данные для входа с правами модератора: Логин: moder | Пароль: password)
+
+(Данные для входа с правами обычного пользователя: Логин: user | Пароль: password)
 
 5. **Запустите сервер разработки:**
 flask run
